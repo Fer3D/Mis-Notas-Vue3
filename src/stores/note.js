@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 export const useNoteStore = defineStore("notes", () => {
     // para crear una API URL: https://beeceptor.com/crud-api/ y poner /api/notes
-    const API_URL = "https://caea01de723f04eff6a4.free.beeceptor.com/api/notes/";
+    const API_URL = "https://ca29535ce187227d9660.free.beeceptor.com/api/notes/";
     const notes = ref([]);
     const loading = ref(false);
     const error = ref(false);
