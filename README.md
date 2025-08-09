@@ -1,5 +1,37 @@
-# Vue 3 + Vite
+# Aplicación web de Notas creada con Vue 3
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+<img width="1912" height="924" src="https://github.com/user-attachments/assets/f30596c3-c541-4bc0-b920-fe5f55318e10" />
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+Aplicación web para tomar y gestionar notas, desarrollada con Vue 3.
+
+## Tecnologías utilizadas
+- **Vue 3**: Framework principal para la interfaz de usuario.
+- **Vite**: Herramienta de desarrollo y bundler.
+- **Pinia**: Gestión de estado global.
+- **Vue Router**: Enrutamiento de páginas.
+- **pinia-plugin-persistedstate**: Persistencia del estado de Pinia.
+
+## Dependencias principales
+- `vue`
+- `pinia`
+- `vue-router`
+- `pinia-plugin-persistedstate` (para las pruebas antes de usar API)
+
+## Características
+- Crear, listar y gestionar notas.
+- Persistencia de notas usando una API REST (Beeceptor).
+- Interfaz moderna y responsiva.
+- Manejo de errores y estados de carga.
+- Separación en componentes reutilizables.
+
+## Instalación y uso
+```bash
+npm install
+npm run dev
+```
+
+## Estructura principal
+- `src/components`: Componentes reutilizables (crear nota, header, tarjeta de nota).
+- `src/views`: Vistas principales (Home, Notes).
+- `src/stores`: Store Pinia para gestión de notas.
+- `src/router`: Configuración de rutas.
