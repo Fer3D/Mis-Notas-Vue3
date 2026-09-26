@@ -1,4 +1,6 @@
 # Aplicación web de Notas creada con Vue 3
+<img width="80%" alt="image" src="https://github.com/user-attachments/assets/366121ac-78bc-47e8-9c66-5e9410214919" />
+
 
 Aplicación web para tomar y gestionar notas, desarrollada con Vue 3.
 
@@ -27,3 +29,5 @@ npm run dev
 - `src/views` — Home, Notes
 - `src/stores` — store Pinia de notas
 - `src/router` — rutas
+
+<img width="80%" alt="image" src="https://github.com/user-attachments/assets/4f741523-9d12-4f81-8780-1525b9a11364" />
