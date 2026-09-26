@@ -1,306 +1,240 @@
 <script setup>
 import HeaderComponent from '../components/HeaderComponent.vue';
-
-
 </script>
 
 <template>
+  <div class="landing">
     <HeaderComponent />
 
-    <main class="home">
-        <section class="hero">
-            <div class="hero-content">
-                <h1 class="hero-title">¡Bienvenido a MisNotas! 📝</h1>
-                <p class="hero-subtitle">
-                    Organiza tus ideas, tareas y pensamientos de manera simple y elegante
-                </p>
-                <div class="hero-actions">
-                    <router-link to="/notes" class="cta-button">
-                        <span class="btn-icon">🚀</span>
-                        <span>Comenzar ahora</span>
-                    </router-link>
-                </div>
-            </div>
-            <div class="hero-illustration">
-                <div class="floating-note note-1">
-                    <div class="note-content">
-                        <div class="note-header"></div>
-                        <div class="note-lines"></div>
-                        <div class="note-lines"></div>
-                    </div>
-                </div>
-                <div class="floating-note note-2">
-                    <div class="note-content">
-                        <div class="note-header"></div>
-                        <div class="note-lines"></div>
-                    </div>
-                </div>
-                <div class="floating-note note-3">
-                    <div class="note-content">
-                        <div class="note-header"></div>
-                        <div class="note-lines"></div>
-                        <div class="note-lines"></div>
-                        <div class="note-lines"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <main class="hero">
+      <div class="hero-copy">
+        <p class="brand-hero">MisNotas</p>
+        <h1 class="headline">Espacio limpio para ideas que no quieres perder.</h1>
+        <p class="lede">Escribe, marca y sigue.</p>
+        <div class="cta-row">
+          <router-link to="/notes" class="cta">Entrar a mis notas</router-link>
+        </div>
+      </div>
 
-        <section class="features">
-            <div class="features-container">
-                <h2 class="features-title">¿Por qué usar MisNotas?</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">⚡</div>
-                        <h3>Rápido y Simple</h3>
-                        <p>Crea y edita notas al instante sin complicaciones</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🎨</div>
-                        <h3>Diseño Moderno</h3>
-                        <p>Interfaz elegante y fácil de usar</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">✅</div>
-                        <h3>Organización</h3>
-                        <p>Marca tus tareas como completadas</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="hero-plane" aria-hidden="true">
+        <div class="sheet sheet-a">
+          <span class="rule"></span>
+          <span class="rule short"></span>
+          <span class="rule mid"></span>
+          <div class="sheet-foot">
+            <svg class="ink-line" viewBox="0 0 160 28" fill="none">
+              <path
+                d="M4 18 C28 8, 52 22, 78 14 C102 7, 128 16, 152 12"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                pathLength="100"
+              />
+            </svg>
+            <span class="check"></span>
+          </div>
+        </div>
+        <div class="sheet sheet-b">
+          <span class="rule"></span>
+          <span class="rule mid"></span>
+          <span class="rule short"></span>
+        </div>
+      </div>
     </main>
+  </div>
 </template>
 
-<style>
-.home {
-    min-height: calc(100vh - 80px);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+<style scoped>
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 20px;
-    min-height: 60vh;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: end;
+  gap: 2rem;
+  min-height: calc(100vh - 68px);
+  padding: clamp(2rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4.5rem) clamp(2.5rem, 6vw, 4rem);
+  position: relative;
+  overflow: hidden;
 }
 
-.hero-content {
-    flex: 1;
-    max-width: 500px;
-    animation: fadeInUp 0.8s ease-out;
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 78% 62%, rgba(13, 101, 88, 0.16), transparent 70%),
+    linear-gradient(120deg, transparent 40%, rgba(255, 255, 255, 0.32) 100%);
+  pointer-events: none;
 }
 
-.hero-title {
-    font-size: 3.5rem;
-    font-weight: 800;
-    color: white;
-    margin: 0 0 20px 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    line-height: 1.2;
+.hero-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 34rem;
+  animation: rise 0.85s var(--ease) both;
 }
 
-.hero-subtitle {
-    font-size: 1.3rem;
-    color: rgba(255, 255, 255, 0.9);
-    margin: 0 0 40px 0;
-    line-height: 1.6;
-    font-weight: 300;
+.brand-hero {
+  margin: 0 0 1rem;
+  font-family: var(--font-brand);
+  font-weight: 600;
+  font-size: clamp(3.2rem, 8.5vw, 5.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-optical-sizing: auto;
+  color: var(--ink);
 }
 
-.hero-actions {
-    display: flex;
-    gap: 20px;
+.headline {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(1.2rem, 2.3vw, 1.55rem);
+  line-height: 1.35;
+  color: var(--ink-soft);
+  max-width: 24ch;
 }
 
-.cta-button {
-    background: rgba(255, 255, 255, 0.95);
-    color: #333;
-    text-decoration: none;
-    padding: 15px 30px;
-    border-radius: 50px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+.lede {
+  margin: 0 0 1.85rem;
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  opacity: 0.9;
 }
 
-.cta-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    background: white;
+.cta-row {
+  display: flex;
+  gap: 0.75rem;
 }
 
-.btn-icon {
-    font-size: 1.2rem;
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.4rem;
+  background: var(--jade);
+  color: #f4fbf8;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  border-radius: 8px;
+  transition: background 0.25s var(--ease), transform 0.25s var(--ease);
 }
 
-.hero-illustration {
-    flex: 1;
-    position: relative;
-    height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.cta:hover {
+  background: var(--jade-deep);
+  transform: translateY(-2px);
 }
 
-.floating-note {
-    position: absolute;
-    width: 120px;
-    height: 140px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 8px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    padding: 15px;
-    animation: float 6s ease-in-out infinite;
+.hero-plane {
+  position: relative;
+  z-index: 1;
+  min-height: min(52vh, 420px);
+  animation: rise 1s var(--ease) 0.12s both;
 }
 
-.note-1 {
-    top: 50px;
-    left: 50px;
-    animation-delay: 0s;
+.sheet {
+  position: absolute;
+  width: min(72%, 320px);
+  aspect-ratio: 3 / 3.6;
+  background: linear-gradient(160deg, #f8fbfc 0%, #e9f1f4 100%);
+  border: 1px solid rgba(22, 24, 26, 0.08);
+  box-shadow: 0 16px 36px rgba(20, 40, 50, 0.11);
+  padding: 1.55rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  overflow: hidden;
 }
 
-.note-2 {
-    top: 100px;
-    right: 80px;
-    animation-delay: 2s;
+.sheet-a {
+  right: 8%;
+  bottom: 12%;
+  transform: rotate(-1.5deg);
+  animation: sheetIn 1s var(--ease) 0.2s both;
 }
 
-.note-3 {
-    bottom: 80px;
-    left: 120px;
-    animation-delay: 4s;
+.sheet-b {
+  right: 28%;
+  bottom: 28%;
+  width: min(55%, 240px);
+  opacity: 0.72;
+  transform: rotate(4deg);
+  animation: sheetIn 1.1s var(--ease) 0.35s both;
+  z-index: 0;
 }
 
-.note-header {
-    height: 8px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 4px;
-    margin-bottom: 10px;
+.rule {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: rgba(22, 24, 26, 0.12);
+  border-radius: 2px;
 }
 
-.note-lines {
-    height: 4px;
-    background: #e0e0e0;
-    border-radius: 2px;
-    margin-bottom: 6px;
+.rule.short {
+  width: 48%;
 }
 
-.note-lines:nth-child(2) {
-    width: 80%;
+.rule.mid {
+  width: 72%;
 }
 
-.note-lines:nth-child(3) {
-    width: 90%;
+.check {
+  width: 1.3rem;
+  height: 1.3rem;
+  border: 2px solid var(--jade);
+  background: var(--jade-glow);
+  flex-shrink: 0;
 }
 
-.note-lines:last-child {
-    width: 60%;
+.sheet-foot {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
 }
 
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0px) rotate(0deg);
-    }
-    50% {
-        transform: translateY(-20px) rotate(2deg);
-    }
+.ink-line {
+  width: 70%;
+  max-width: 8.5rem;
+  color: var(--jade);
+  opacity: 0.8;
 }
 
-.features {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    padding: 80px 20px;
+.ink-line path {
+  stroke-dasharray: 100;
+  animation: inkDraw 1.1s var(--ease) 0.7s both;
 }
 
-.features-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
-}
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+    align-items: start;
+    min-height: auto;
+    padding-bottom: 3rem;
+  }
 
-.features-title {
-    font-size: 2.5rem;
-    color: white;
-    margin: 0 0 60px 0;
-    font-weight: 700;
-}
+  .hero-plane {
+    min-height: 280px;
+    margin-top: 1rem;
+  }
 
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 40px;
-}
+  .sheet-a {
+    right: 6%;
+    bottom: 8%;
+  }
 
-.feature-card {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 40px 30px;
-    border-radius: 20px;
-    text-align: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.feature-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-}
-
-.feature-icon {
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-.feature-card h3 {
-    font-size: 1.5rem;
-    color: #333;
-    margin: 0 0 15px 0;
-    font-weight: 600;
-}
-
-.feature-card p {
-    color: #666;
-    line-height: 1.6;
-    margin: 0;
-}
-
-@media (max-width: 768px) {
-    .hero {
-        flex-direction: column;
-        text-align: center;
-        padding: 40px 20px;
-    }
-    
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 1.1rem;
-    }
-    
-    .hero-illustration {
-        height: 300px;
-        margin-top: 40px;
-    }
-    
-    .floating-note {
-        width: 100px;
-        height: 120px;
-    }
-    
-    .features-title {
-        font-size: 2rem;
-    }
-    
-    .features-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
+  .sheet-b {
+    right: 36%;
+    bottom: 22%;
+  }
 }
 </style>

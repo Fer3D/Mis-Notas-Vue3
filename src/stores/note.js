@@ -1,81 +1,69 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const useNoteStore = defineStore("notes", () => {
-    // para crear una API URL: https://beeceptor.com/crud-api/ y poner /api/notes
-    const API_URL = "https://ca29535ce187227d9660.free.beeceptor.com/api/notes/";
+export const useNoteStore = defineStore(
+  "notes",
+  () => {
     const notes = ref([]);
     const loading = ref(false);
     const error = ref(false);
 
-    const getNotes = async () => {
-        try {
-            loading.value = true;
-
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            notes.value = data.reverse();
-
-            loading.value = false;
-            error.value = false;
-        } catch (e) {
-            loading.value = false;
-            error.value = true;
-        }
-    }
-
     const createId = () => {
-        return Date.now().toString(36) + Math.random().toString(36).slice(2);
-    }
+      return Date.now().toString(36) + Math.random().toString(36).slice(2);
+    };
+
+    const getNotes = async () => {
+      loading.value = true;
+      error.value = false;
+      await Promise.resolve();
+      loading.value = false;
+    };
 
     const addNote = async (title) => {
-        const newNote = {
-            id: createId(),
-            title,
-            marked: false,
-        }
-        try {
-            await fetch(API_URL, {
-                method: "POST",
-                body: JSON.stringify(newNote)
-            })
+      const trimmed = title.trim();
+      if (!trimmed) return;
 
-            getNotes();
-        } catch (e) {
-            error.value = true;
-        }
-    }
+      notes.value = [
+        {
+          id: createId(),
+          title: trimmed,
+          marked: false,
+        },
+        ...notes.value,
+      ];
+      error.value = false;
+    };
 
-        const editNote = async (note) => {
-            try {
-                await fetch(API_URL + note.id, {
-                    method: "PUT",
-                    body: JSON.stringify(note),
-                });
-                await getNotes();
-            } catch (e) {
-                error.value = true;
-            }
-        }
+    const editNote = async (note) => {
+      const index = notes.value.findIndex((n) => n.id === note.id);
+      if (index === -1) return;
+
+      notes.value[index] = {
+        ...notes.value[index],
+        title: note.title,
+        marked: note.marked,
+      };
+      error.value = false;
+    };
 
     const deleteNote = async (id) => {
-        try {
-            await fetch(API_URL + id, {
-                method: "DELETE"
-            });
-            await getNotes();
-        } catch (e) {
-            error.value = true;
-        }
-    }
+      notes.value = notes.value.filter((n) => n.id !== id);
+      error.value = false;
+    };
 
     return {
-        notes,
-        loading,
-        error,
-        getNotes,
-        addNote,
-        editNote,
-        deleteNote,
-    }
-})
+      notes,
+      loading,
+      error,
+      getNotes,
+      addNote,
+      editNote,
+      deleteNote,
+    };
+  },
+  {
+    persist: {
+      pick: ["notes"],
+    },
+  }
+);

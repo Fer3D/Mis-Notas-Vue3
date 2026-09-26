@@ -1,216 +1,180 @@
 <script setup>
 import { useNoteStore } from '../stores/note';
-import { ref } from 'vue';
 
 const props = defineProps({
-    note: Object
+  note: Object,
 });
 
 const noteStore = useNoteStore();
-const isEditing = ref(false);
+
+function toggleMarked(event) {
+  noteStore.editNote({
+    ...props.note,
+    marked: event.target.checked,
+  });
+}
 
 function updateNote() {
-    noteStore.editNote(props.note);
+  noteStore.editNote({
+    id: props.note.id,
+    title: props.note.title,
+    marked: props.note.marked,
+  });
 }
 
 function deleteNote() {
-    if (confirm('¿Estás seguro de que quieres eliminar esta nota?')) {
-        noteStore.deleteNote(props.note.id);
-    }
+  if (confirm('¿Eliminar esta nota?')) {
+    noteStore.deleteNote(props.note.id);
+  }
 }
 </script>
 
 <template>
-    <article class="note-card" :class="{ completed: note.marked }">
-        <div class="note-content">
-            <input
-                type="text"
-                class="card-title"
-                v-model="note.title"
-                @blur="updateNote"
-                @keyup.enter="updateNote"
-                placeholder="Escribe algo..."
-            >
-            <div class="note-actions">
-                <label class="checkbox-wrapper">
-                    <input type="checkbox" v-model="note.marked" @change="updateNote">
-                    <span class="checkmark">✓</span>
-                </label>
-                <button class="delete-btn" @click="deleteNote" title="Eliminar nota">
-                    <span class="delete-icon">🗑️</span>
-                </button>
-            </div>
-        </div>
-    </article>
+  <article class="note" :class="{ done: note.marked }">
+    <label class="mark">
+      <input
+        type="checkbox"
+        :checked="note.marked"
+        @change="toggleMarked"
+      />
+      <span class="box" aria-hidden="true"></span>
+      <span class="sr-only">Marcar como hecha</span>
+    </label>
+
+    <input
+      type="text"
+      class="title"
+      v-model="note.title"
+      @blur="updateNote"
+      @keyup.enter="($event.target.blur())"
+      placeholder="Sin título"
+      maxlength="200"
+    />
+
+    <button type="button" class="remove" @click="deleteNote" aria-label="Eliminar nota">
+      Eliminar
+    </button>
+  </article>
 </template>
 
-<style>
-.note-card {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+<style scoped>
+.note {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 0.95rem;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: background 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.2s var(--ease);
+  animation: rise 0.45s var(--ease) both;
 }
 
-.note-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-    transform-origin: left;
-    opacity: 0;
+.note:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(15, 107, 92, 0.22);
 }
 
-.note-card:hover::before {
-    transform: scaleX(1);
-    opacity: 0;
+.note.done {
+  background: rgba(255, 255, 255, 0.42);
 }
 
-.note-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+.mark {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
 }
 
-.note-card.completed {
-    background: rgba(240, 240, 240, 0.9);
+.mark input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
 }
 
-.note-card.completed::before {
-    background: #28a745;
-    transform: scaleX(1);
+.box {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid rgba(20, 20, 20, 0.28);
+  border-radius: 4px;
+  display: block;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.mark:hover .box {
+  border-color: var(--jade);
+}
+
+.mark input:checked + .box {
+  background: var(--jade);
+  border-color: var(--jade);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3.5 8.2L6.4 11l6-7' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.title {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 0.2rem 0;
+}
+
+.title:focus {
+  color: var(--jade-deep);
+}
+
+.done .title {
+  text-decoration: line-through;
+  color: rgba(58, 66, 72, 0.55);
+  font-weight: 400;
+}
+
+.remove {
+  border: none;
+  background: transparent;
+  color: rgba(58, 66, 72, 0.55);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.35rem 0.45rem;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease), color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.note:hover .remove,
+.note:focus-within .remove {
+  opacity: 1;
+}
+
+.remove:hover {
+  color: var(--danger);
+  background: rgba(180, 35, 24, 0.08);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 560px) {
+  .remove {
     opacity: 1;
-}
-
-.note-content {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.card-title {
-    flex: 1;
-    background: transparent;
-    border: none;
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #333;
-    padding: 8px 0;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-.card-title:focus {
-    color: #667eea;
-}
-
-.card-title::placeholder {
-    color: #999;
-    font-style: italic;
-}
-
-.completed .card-title {
-    text-decoration: line-through;
-    color: #888;
-    font-weight: 300;
-}
-
-.note-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.checkbox-wrapper {
-    position: relative;
-    cursor: pointer;
-    user-select: none;
-}
-
-.checkbox-wrapper input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-}
-
-.checkmark {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 24px;
-    width: 24px;
-    background: white;
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    font-size: 14px;
-    color: white;
-}
-
-.checkbox-wrapper:hover .checkmark {
-    border-color: #667eea;
-}
-
-.checkbox-wrapper input:checked ~ .checkmark {
-    background: #28a745;
-    border-color: #28a745;
-}
-
-.checkbox-wrapper input:checked ~ .checkmark::after {
-    opacity: 1;
-}
-
-.delete-btn {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.9rem;
-}
-
-.delete-btn:hover {
-    transform: scale(1.1);
-    background: linear-gradient(135deg, #ee5a24, #c44569);
-    box-shadow: 0 4px 15px rgba(238, 90, 36, 0.4);
-}
-
-.delete-btn:active {
-    transform: scale(0.95);
-}
-
-.delete-icon {
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
-}
-
-@media (max-width: 600px) {
-    .note-card {
-        padding: 15px;
-    }
-    
-    .note-content {
-        gap: 10px;
-    }
-    
-    .card-title {
-        font-size: 1rem;
-    }
+  }
 }
 </style>

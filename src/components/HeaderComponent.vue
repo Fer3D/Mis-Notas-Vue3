@@ -1,94 +1,96 @@
-<script setup></script>
+<script setup>
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const onNotes = () => route.name === 'notes';
+</script>
 
 <template>
-    <header class="header">
-        <div class="header-content">
-            <h1 class="title">📋 MisNotas</h1>
-            <nav>
-                <ul class="nav-list">
-                    <li>
-                        <router-link to="/" class="link">🏠 Inicio</router-link>
-                    </li>
-                    <li>
-                        <router-link to="/notes" class="link">📝 Notas</router-link>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+  <header class="site-header">
+    <router-link to="/" class="brand" aria-label="MisNotas inicio">
+      <span class="brand-name">MisNotas</span>
+    </router-link>
+    <nav class="site-nav" aria-label="Principal">
+      <router-link to="/" class="nav-link" :class="{ 'is-active': route.name === 'home' }">
+        Inicio
+      </router-link>
+      <router-link
+        to="/notes"
+        class="nav-link"
+        :class="onNotes() ? 'is-active' : 'nav-link--cta'"
+      >
+        {{ onNotes() ? 'Notas' : 'Abrir notas' }}
+      </router-link>
+    </nav>
+  </header>
 </template>
 
-<style>
-.header {
-    background: linear-gradient(135deg, #2c3e50, #34495e);
-    color: white;
-    padding: 20px 0;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(10px);
+<style scoped>
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.5rem;
+  background: rgba(243, 247, 249, 0.78);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
 }
 
-.header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.brand {
+  text-decoration: none;
+  color: var(--ink);
 }
 
-.title {
-    margin: 0;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #f5f5f5;
-    letter-spacing: 1px;
-    text-shadow: none;
+.brand-name {
+  font-family: var(--font-brand);
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.015em;
+  font-optical-sizing: auto;
 }
 
-.nav-list {
-    display: flex;
-    gap: 30px;
-    align-items: center;
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-.link {
-    color: rgba(255, 255, 255, 0.9);
-    text-decoration: none;
-    font-weight: 500;
-    padding: 8px 16px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    position: relative;
+.nav-link {
+  text-decoration: none;
+  padding: 0.5rem 0.85rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  border-radius: 8px;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
 }
 
-.link:hover {
-    color: white;
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
+.nav-link:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.6);
 }
 
-.link.router-link-active {
-    color: white;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+.nav-link.is-active {
+  color: var(--jade-deep);
 }
 
-@media (max-width: 768px) {
-    .header-content {
-        flex-direction: column;
-        gap: 15px;
-        padding: 0 15px;
-    }
+.nav-link--cta {
+  background: var(--ink);
+  color: #f5f8fa;
+}
 
-    .title {
-        font-size: 1.5rem;
-    }
+.nav-link--cta:hover {
+  background: var(--jade-deep);
+  color: #f5f8fa;
+}
 
-    .nav-list {
-        gap: 20px;
-    }
+@media (max-width: 560px) {
+  .site-header {
+    padding: 0.8rem 1rem;
+  }
 }
 </style>

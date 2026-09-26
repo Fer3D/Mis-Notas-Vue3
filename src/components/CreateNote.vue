@@ -3,137 +3,116 @@ import { ref } from 'vue';
 import { useNoteStore } from '../stores/note';
 
 const noteStore = useNoteStore();
+const title = ref('');
+const inputRef = ref(null);
 
 const handleSubmit = () => {
-    noteStore.addNote(title.value);
-    title.value = "";
-}
+  const value = title.value.trim();
+  if (!value) return;
+  noteStore.addNote(value);
+  title.value = '';
+  inputRef.value?.focus();
+};
 
-const title = ref("");
+defineExpose({
+  focusInput: () => inputRef.value?.focus(),
+});
 </script>
 
 <template>
-    <div class="create-note-wrapper">
-        <form class="note-form" @submit.prevent="handleSubmit">
-            <div class="input-group">
-                <input 
-                    type="text" 
-                    class="note-title" 
-                    placeholder="✏️ Escribe tu nueva nota aquí..."
-                    v-model="title"
-                    required
-                >
-                <button type="submit" class="create-btn" :disabled="!title.trim()">
-                    <span class="btn-icon">+</span>
-                    <span class="btn-text">Agregar</span>
-                </button>
-            </div>
-        </form>
+  <form class="compose" @submit.prevent="handleSubmit">
+    <label class="compose-label" for="note-title">Nueva nota</label>
+    <div class="compose-row">
+      <input
+        id="note-title"
+        ref="inputRef"
+        v-model="title"
+        type="text"
+        class="compose-input"
+        placeholder="¿Qué quieres recordar?"
+        maxlength="200"
+        autocomplete="off"
+      />
+      <button type="submit" class="compose-btn" :disabled="!title.trim()">
+        Añadir
+      </button>
     </div>
+  </form>
 </template>
 
-<style>
-.create-note-wrapper {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
+<style scoped>
+.compose {
+  width: 100%;
 }
 
-.note-form {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease;
+.compose-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
 }
 
-.note-form:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+.compose-row {
+  display: flex;
+  gap: 0.55rem;
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.35rem;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 
-.input-group {
-    display: flex;
-    gap: 15px;
-    align-items: center;
+.compose-row:focus-within {
+  border-color: rgba(13, 101, 88, 0.45);
+  box-shadow: 0 0 0 3px var(--jade-glow);
 }
 
-.note-title {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.8);
-    border: 2px solid transparent;
-    border-radius: 12px;
-    padding: 15px 20px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #333;
-    transition: all 0.3s ease;
-    outline: none;
+.compose-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0.65rem 0.8rem;
+  outline: none;
+  color: var(--ink);
+  font-size: 1.05rem;
 }
 
-.note-title:focus {
-    border-color: #667eea;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+.compose-input::placeholder {
+  color: rgba(74, 83, 90, 0.55);
 }
 
-.note-title::placeholder {
-    color: #888;
-    font-weight: 400;
+.compose-btn {
+  border: none;
+  background: var(--jade);
+  color: #f4fbf8;
+  font-weight: 700;
+  padding: 0 1.15rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s var(--ease), opacity 0.2s var(--ease);
 }
 
-.create-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 15px 20px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 120px;
-    justify-content: center;
+.compose-btn:hover:not(:disabled) {
+  background: var(--jade-deep);
 }
 
-.create-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+.compose-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
-.create-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
+@media (max-width: 560px) {
+  .compose-row {
+    flex-direction: column;
+  }
 
-.btn-icon {
-    font-size: 1.4rem;
-    font-weight: 300;
-}
-
-.btn-text {
-    font-size: 0.9rem;
-}
-
-@media (max-width: 600px) {
-    .input-group {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .note-title {
-        width: 100%;
-    }
-    
-    .create-btn {
-        width: 100%;
-        min-width: auto;
-    }
+  .compose-btn {
+    padding: 0.7rem 1rem;
+  }
 }
 </style>
